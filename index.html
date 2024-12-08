@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stock Price Prediction</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f4f4f9;
+      color: #333;
+    }
+
+    .container {
+      text-align: center;
+      padding: 20px;
+      border-radius: 10px;
+      background: white;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      width: 90%;
+    }
+
+    h1 {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      color: #0056b3;
+    }
+
+    .data {
+      font-size: 1.1rem;
+      margin: 10px 0;
+    }
+
+    .error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Stock Price Prediction</h1>
+    <div id="timestamp" class="data"></div>
+    <div id="predicted-price" class="data"></div>
+    <div id="error-message" class="error"></div>
+  </div>
+
+  <script>
+    // Fetch data from the backend server
+    async function fetchData() {
+      const apiUrl = 'http://localhost:5000/api/predicted_price';
+
+      try {
+        const response = await fetch(apiUrl);
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        document.getElementById('timestamp').textContent = `Timestamp: ${data.timestamp}`;
+        document.getElementById('predicted-price').textContent = `Predicted Price: ${data.predicted_price.toFixed(2)}`;
+      } catch (error) {
+        document.getElementById('error-message').textContent = `Error: ${error.message}`;
+      }
+    }
+
+    // Fetch data when the page loads
+    fetchData();
+  </script>
+</body>
+</html>
